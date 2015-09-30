@@ -25,23 +25,33 @@ uint8_t gCurrentPaletteIndex = 0;
 typedef struct { 
   uint8_t mStart;
   uint8_t mLength;
+  bool isDown;
 } Strip;
 
 Strip strips[] = {
-  {0, 13},
-  {13, 12},
-  {25, 11},
-  {36, 11},
-  {47, 11},
-  {58, 12},
+  {0, 13, true},
+  {13, 12, false},
+  {25, 11, true},
+  {36, 11, false},
+  {47, 11, true},
+  {58, 12, false},
 
-  {70, 13},
-  {83, 10},
-  {93, 11},
-  {104, 11},
-  {115, 11},
-  {126, 12}
+  {70, 13, true},
+  {83, 10, false},
+  {93, 11, true},
+  {104, 11, false},
+  {115, 11, true},
+  {126, 12, false}
 };
+
+uint8_t ledPosDown(uint8_t stripIndex, uint8_t pixelIndex)
+{
+  if (strips[stripIndex].isDown) {
+    return strips[stripIndex].mStart + pixelIndex;
+  } else {
+    return strips[stripIndex].mStart + strips[stripIndex].mLength - 1 - pixelIndex;
+  }
+}
 
 static const int numberOfStrips = sizeof(strips) / sizeof(strips[0]);  
 
@@ -68,6 +78,7 @@ typedef struct {
  
 
 AnimationPattern gAnimations[] = {
+  {drops, 0, 4},
   {sinelon,  5, 4},
   {soundAnimate, 0, 0},
 };
@@ -102,6 +113,8 @@ void onClick() {
 }
 
 void loop() {
+  random16_add_entropy(random());
+  
   button.tick();
 
   uint8_t arg1 = gAnimations[gCurrentPatternNumber].mArg1;
