@@ -78,13 +78,28 @@ uint8_t soundAnimate(uint8_t randomPosition, uint8_t fakeTop) {
       centerPoint = random8(NUM_LEDS_RANDOM);
     }
   } else {
-    for (int iStrip = 0; iStrip < numberOfStrips; iStrip++) {
-      Strip strip = strips[iStrip];
-      for (int i=0; i < strip.mLength; i++) {
-        if (i >= height)  leds[strip.mStart + i].setRGB(0, 0, 0);
-        else leds[strip.mStart + i] = ColorFromPalette(gPalettes[gCurrentPaletteIndex], 90 + map(i, 0, MAX_SINGLE_STRIP_LENGTH-1, 0, 255), 100, LINEARBLEND);
+    for (uint8_t i = 0; i < MAX_SINGLE_STRIP_LENGTH; i++) {  
+      CRGB color;
+      if (i >= height) {
+        color = CRGB(0, 0, 0);
+      } else {
+        color = ColorFromPalette(gPalettes[gCurrentPaletteIndex], 90 + map(i, 0, MAX_SINGLE_STRIP_LENGTH-1, 0, 255), 100, LINEARBLEND);
       }
       
+      for (uint8_t iStrip = 0; iStrip < numberOfStrips; iStrip++) {
+        Strip strip = strips[iStrip];
+        if (i >= strip.mLength) continue;
+        leds[strip.mStart + i] = color;
+      }
+    }
+
+    bool showPeak = peak > 0 && peak <= MAX_SINGLE_STRIP_LENGTH-1;
+    CHSV peakColor = CHSV(map(peak,0,MAX_SINGLE_STRIP_LENGTH-1,30,150), 255, 255);
+    for (int iStrip = 0; iStrip < numberOfStrips; iStrip++) {
+      Strip strip = strips[iStrip];
+      if (showPeak) {
+        leds[strip.mStart + peak] = peakColor;
+      }
     }
   }
 

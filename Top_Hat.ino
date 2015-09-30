@@ -13,6 +13,7 @@
 struct CRGB leds[NUM_LEDS];
 
 //#define DEBUG
+//#define DEBUG_ANIMATIONS
 
 #include "DebugUtils.h"
 
@@ -114,4 +115,8 @@ void loop() {
 
   show_at_max_brightness_for_power();
   gHue++;
+
+  #ifdef DEBUG_ANIMATIONS
+  EVERY_N_MILLISECONDS(500)  {Serial.print("FPS: ");Serial.println(FastLED.getFPS());}
+  #endif
 }
