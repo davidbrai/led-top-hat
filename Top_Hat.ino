@@ -47,6 +47,10 @@ static const int numberOfStrips = sizeof(strips) / sizeof(strips[0]);
 #define MIC_PIN A10
 #include "SoundReactive.h"
 
+uint8_t gHue = 0;
+
+#include "Animations.h"
+
 void setup() {
 
   DEBUG_START(57600);
@@ -63,7 +67,9 @@ void setup() {
 }
 
 void loop() {
-  soundAnimate(0, 0);
+//  soundAnimate(0, 0);
+  sinelon(5, 4);
 
   show_at_max_brightness_for_power();
+  gHue++;
 }
