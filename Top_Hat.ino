@@ -51,6 +51,28 @@ uint8_t gHue = 0;
 
 #include "Animations.h"
 
+/** 
+ * Button Switcher
+ */ 
+#include "Button.h"
+#define BUTTON_PIN      12
+Button button(BUTTON_PIN, true);
+
+typedef uint8_t (*Animation)(uint8_t arg1, uint8_t arg2);
+typedef struct { 
+  Animation mPattern;
+  uint8_t mArg1;
+  uint8_t mArg2;
+} AnimationPattern;
+ 
+
+AnimationPattern gAnimations[] = {
+  {sinelon,  5, 4},
+  {soundAnimate, 0, 0},
+};
+
+uint8_t gCurrentPatternNumber = 0; 
+
 void setup() {
 
   DEBUG_START(57600);
@@ -64,11 +86,31 @@ void setup() {
   fill_solid(leds, NUM_LEDS, CRGB::Black);
   show_at_max_brightness_for_power();
   delay(100);
+
+  // Button
+  button.attachClick(onClick);
+}
+
+void onClick() { 
+  PRINT("Next animation");
+  
+  static const int numberOfPatterns = sizeof(gAnimations) / sizeof(gAnimations[0]);  
+  gCurrentPatternNumber = (gCurrentPatternNumber+1) % numberOfPatterns;
+
+  Animation animate = gAnimations[gCurrentPatternNumber].mPattern;
 }
 
 void loop() {
+  button.tick();
+
+  uint8_t arg1 = gAnimations[gCurrentPatternNumber].mArg1;
+  uint8_t arg2 = gAnimations[gCurrentPatternNumber].mArg2;
+  Animation animate = gAnimations[gCurrentPatternNumber].mPattern;
+  
+  animate(arg1, arg2);
+  
 //  soundAnimate(0, 0);
-  sinelon(5, 4);
+//  sinelon(5, 4);
 
   show_at_max_brightness_for_power();
   gHue++;
