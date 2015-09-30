@@ -4,7 +4,7 @@
 #define LED_PIN2 1
 #define NUM_LEDS1 70
 #define NUM_LEDS2 68
-#define NUM_LEDS NUM_LEDS1+NUM_LEDS2
+#define NUM_LEDS (NUM_LEDS1+NUM_LEDS2)
 
 #define MAX_SINGLE_STRIP_LENGTH 13
 
@@ -69,6 +69,8 @@ uint8_t gHue = 0;
 #define BUTTON_PIN      12
 Button button(BUTTON_PIN, true);
 
+#include "SettingsMode.h"
+
 typedef uint8_t (*Animation)(uint8_t arg1, uint8_t arg2);
 typedef struct { 
   Animation mPattern;
@@ -101,6 +103,7 @@ void setup() {
 
   // Button
   button.attachClick(onClick);
+  button.attachTripleClick(onTripleClick);
 }
 
 void onClick() { 
@@ -110,6 +113,17 @@ void onClick() {
   gCurrentPatternNumber = (gCurrentPatternNumber+1) % numberOfPatterns;
 
   Animation animate = gAnimations[gCurrentPatternNumber].mPattern;
+}
+
+void onTripleClick() { 
+  PRINT("Opening settings");
+  
+  SettingsMode settings = SettingsMode(&button);
+  settings.showSettings();
+
+  uint8_t brightness = settings.getUserBrightness();
+  PRINTX("TripleClick - New brightness: ", brightness);
+  FastLED.setBrightness(brightness); 
 }
 
 void loop() {
