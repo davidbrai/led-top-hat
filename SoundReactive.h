@@ -78,17 +78,6 @@ uint8_t soundAnimate(uint8_t randomPosition, uint8_t fakeTop) {
       centerPoint = random8(NUM_LEDS_RANDOM);
     }
   } else {
-    /*
-    for (i=0; i<NUM_LEDS; i++) {
-      if (i >= height)  leds[i].setRGB(0, 0, 0);
-      else leds[i] = ColorFromPalette(gPalettes[gCurrentPaletteIndex], 90 + map(i, 0, NUM_LEDS-1, 0, 255), 100, LINEARBLEND);
-    }
-    // Draw peak dot  
-    if (peak > 0 && peak <= NUM_LEDS-1) leds[peak] = CHSV(map(peak,0,NUM_LEDS-1,30,150), 255, 255);
-*/
-
-    PRINTX("numstrips: ", numberOfStrips);
-    
     for (int iStrip = 0; iStrip < numberOfStrips; iStrip++) {
       Strip strip = strips[iStrip];
       for (int i=0; i < strip.mLength; i++) {
