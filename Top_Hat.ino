@@ -12,7 +12,7 @@
 
 struct CRGB leds[NUM_LEDS];
 
-//#define DEBUG
+#define DEBUG
 //#define DEBUG_ANIMATIONS
 
 #include "DebugUtils.h"
@@ -53,6 +53,15 @@ uint8_t ledPosDown(uint8_t stripIndex, uint8_t pixelIndex)
   }
 }
 
+uint8_t ledPosUp(uint8_t stripIndex, uint8_t pixelIndex)
+{
+  if (strips[stripIndex].isDown) {
+    return strips[stripIndex].mStart + strips[stripIndex].mLength - 1 - pixelIndex;
+  } else {
+    return strips[stripIndex].mStart + pixelIndex;
+  }
+}
+
 static const int numberOfStrips = sizeof(strips) / sizeof(strips[0]);  
 
 #define MIC_PIN A10
@@ -81,6 +90,7 @@ typedef struct {
 
 AnimationPattern gAnimations[] = {
   {drops, 0, 4},
+  {spiral, 0, 1},
   {sinelon,  5, 4},
   {soundAnimate, 0, 0},
   {soundAnimate, 1, 0},

@@ -30,3 +30,30 @@ uint8_t drops(uint8_t arg0, uint8_t fadeAmount)
   return 0;
 }
 
+static uint8_t spiralStripIndex = 0;
+static uint8_t spiralPos = 0;
+
+uint8_t spiral(uint8_t arg0, uint8_t fadeAmount)
+{
+  fadeToBlackBy(leds, NUM_LEDS, fadeAmount);
+
+  EVERY_N_MILLIS(100) {
+    spiralStripIndex++;
+    if (spiralStripIndex >= numberOfStrips) {
+      spiralStripIndex = 0;
+    }
+  }
+
+  EVERY_N_MILLIS(1000) {
+    spiralPos++;
+    if (spiralPos >= strips[spiralStripIndex].mLength) {
+      spiralPos = 0;
+    }
+  }
+
+  uint8_t x = ledPosUp(spiralStripIndex, spiralPos);
+  leds[x] += CHSV(gHue, 255, 192);
+  
+  return 0;
+}
+
