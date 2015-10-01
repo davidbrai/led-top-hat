@@ -24,9 +24,6 @@ void fadeLed(CRGB *leds, uint8_t i);
 unsigned long lastHighSignal = millis();
 unsigned long lastTwinkle = 0;
 
-#define NUM_LEDS_RANDOM_BACK 25
-#define NUM_LEDS_RANDOM NUM_LEDS-NUM_LEDS_RANDOM_BACK
-
 uint8_t soundAnimate(uint8_t randomPosition, uint8_t fakeTop) {
   
   uint8_t  i;
@@ -62,20 +59,18 @@ uint8_t soundAnimate(uint8_t randomPosition, uint8_t fakeTop) {
     }
 
     // draw front
-    for (i=0; i<NUM_LEDS_RANDOM; i++) {
+    for (i=0; i<NUM_LEDS; i++) {
       int distanceFromCenter = abs(centerPoint - i);
-      if (distanceFromCenter >= (height/2)) {
+      if (distanceFromCenter >= height) {
         leds[i] = CRGB::Black;
       } else {
-        leds[i] = ColorFromPalette(gPalettes[gCurrentPaletteIndex], 90 + map(distanceFromCenter, 0, (NUM_LEDS-1)/2, 0, 255), 100, LINEARBLEND);
+        leds[i] = ColorFromPalette(gPalettes[gCurrentPaletteIndex], 90 + map(distanceFromCenter, 0, (NUM_LEDS-1)/5, 0, 255), 100, LINEARBLEND);
       }
     }
-    // draw back
-    memcpy8(&leds[NUM_LEDS_RANDOM], leds, sizeof(leds[0])*NUM_LEDS_RANDOM_BACK);
     
     //move center point randomly
     if ((height == 0) && (random8(2) == 1)) {
-      centerPoint = random8(NUM_LEDS_RANDOM);
+      centerPoint = random8(NUM_LEDS);
     }
   } else {
     for (uint8_t i = 0; i < MAX_SINGLE_STRIP_LENGTH; i++) {  

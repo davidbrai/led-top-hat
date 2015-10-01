@@ -83,6 +83,7 @@ AnimationPattern gAnimations[] = {
   {drops, 0, 4},
   {sinelon,  5, 4},
   {soundAnimate, 0, 0},
+  {soundAnimate, 1, 0},
 };
 
 uint8_t gCurrentPatternNumber = 0; 
