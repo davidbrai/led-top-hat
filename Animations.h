@@ -12,7 +12,7 @@ static uint8_t dropStripIndex = 0;
 static uint8_t dropPos = 0;
 static uint8_t dropHue = 0;
 
-uint8_t drops(uint8_t arg0, uint8_t fadeAmount)
+uint8_t drops(uint8_t colorful, uint8_t fadeAmount)
 {
   fadeToBlackBy(leds, NUM_LEDS, fadeAmount);
 
@@ -25,7 +25,8 @@ uint8_t drops(uint8_t arg0, uint8_t fadeAmount)
     }
   }
 
-  leds[ledPosDown(dropStripIndex, dropPos)] += CHSV(dropHue, 255, 192);
+  uint8_t saturation = colorful ? 255 : 0;
+  leds[ledPosDown(dropStripIndex, dropPos)] += CHSV(dropHue, saturation, 192);
   
   return 0;
 }
