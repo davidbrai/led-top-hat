@@ -89,6 +89,7 @@ typedef struct {
  
 
 AnimationPattern gAnimations[] = {
+//  {movingCircle, 0, 0},
   {drops, 1, 4},
   {drops, 0, 4},
   {spiral, 0, 1},

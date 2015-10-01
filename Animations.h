@@ -58,3 +58,29 @@ uint8_t spiral(uint8_t arg0, uint8_t fadeAmount)
   return 0;
 }
 
+
+static uint8_t circleStripIndex = 0;
+static uint8_t circleStripIndex2 = 0;
+
+uint8_t movingCircle(uint8_t arg0, uint8_t arg1)
+{
+  fadeToBlackBy(leds, NUM_LEDS, 8);
+  
+  EVERY_N_MILLIS(100) {
+    circleStripIndex = (circleStripIndex + 1) % numberOfStrips;
+    circleStripIndex2 = (circleStripIndex2 + (numberOfStrips-1)) % numberOfStrips;
+  }
+
+  Strip strip = strips[circleStripIndex];
+  for (int i = strip.mStart; i < strip.mStart + strip.mLength; i++) {
+    leds[i] += CHSV(gHue, 255, 192);
+  }
+
+  strip = strips[circleStripIndex2];
+  for (int i = strip.mStart; i < strip.mStart + strip.mLength; i++) {
+    leds[i] += CHSV(gHue, 255, 192);
+  }
+  
+  return 0;
+}
+
