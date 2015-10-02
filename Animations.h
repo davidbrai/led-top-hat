@@ -84,3 +84,27 @@ uint8_t movingCircle(uint8_t arg0, uint8_t arg1)
   return 0;
 }
 
+
+AnimationPattern switcherAnimations[] = {
+  {drops, 1, 4},
+  {spiral, 0, 1},
+  {drops, 0, 4},
+  {sinelon,  5, 4},
+};
+
+static const int numberOfSwitcherAnimations = sizeof(switcherAnimations) / sizeof(switcherAnimations[0]);
+static uint8_t switcherCurrentAnimation = 0;
+
+uint8_t animationSwitcher(uint8_t arg0, uint8_t arg1)
+{
+  uint8_t x = switcherAnimations[switcherCurrentAnimation].mArg1;
+  uint8_t y= switcherAnimations[switcherCurrentAnimation].mArg2;
+  Animation animate = switcherAnimations[switcherCurrentAnimation].mPattern;
+
+  animate(x, y);
+  
+  EVERY_N_MILLIS(30000) {
+    switcherCurrentAnimation = (switcherCurrentAnimation + 1) % numberOfSwitcherAnimations;
+  }
+}
+

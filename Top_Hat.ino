@@ -69,6 +69,13 @@ static const int numberOfStrips = sizeof(strips) / sizeof(strips[0]);
 
 uint8_t gHue = 0;
 
+typedef uint8_t (*Animation)(uint8_t arg1, uint8_t arg2);
+typedef struct { 
+  Animation mPattern;
+  uint8_t mArg1;
+  uint8_t mArg2;
+} AnimationPattern;
+
 #include "Animations.h"
 
 /** 
@@ -80,16 +87,9 @@ Button button(BUTTON_PIN, true);
 
 #include "SettingsMode.h"
 
-typedef uint8_t (*Animation)(uint8_t arg1, uint8_t arg2);
-typedef struct { 
-  Animation mPattern;
-  uint8_t mArg1;
-  uint8_t mArg2;
-} AnimationPattern;
- 
-
 AnimationPattern gAnimations[] = {
 //  {movingCircle, 0, 0},
+  {animationSwitcher, 0, 0},
   {drops, 1, 4},
   {drops, 0, 4},
   {spiral, 0, 1},
@@ -119,13 +119,11 @@ void setup() {
   button.attachTripleClick(onTripleClick);
 }
 
+static const int numberOfPatterns = sizeof(gAnimations) / sizeof(gAnimations[0]);
+
 void onClick() { 
   PRINT("Next animation");
-  
-  static const int numberOfPatterns = sizeof(gAnimations) / sizeof(gAnimations[0]);  
   gCurrentPatternNumber = (gCurrentPatternNumber+1) % numberOfPatterns;
-
-  Animation animate = gAnimations[gCurrentPatternNumber].mPattern;
 }
 
 void onTripleClick() { 
